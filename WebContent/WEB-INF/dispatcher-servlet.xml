@@ -1,0 +1,67 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:p="http://www.springframework.org/schema/p"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+  
+   <bean id="surl" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+        <props>
+           <prop key="/home.htm">pvc1</prop>
+           <prop key="/liststudents.htm">stlc</prop>
+           <prop key="/insert_student.htm">sic</prop>
+           <prop key="/edit.htm">suc</prop>
+           
+           <prop key="/delete.htm">pvc2</prop>
+           <prop key="/delete_result.htm">sdc</prop> 
+          
+        </props>
+    </property>
+  </bean>
+  
+  <bean id="stValidator" class="com.nt.validator.StudentValidator"/>
+  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+  	<property name="basename" value="com/nt/validator/StudentErrors"/>
+  </bean>
+  
+   <bean id="stlc"  class="com.nt.controller.ListStudentsController">
+     <property  name="service" ref="stService"/>
+   </bean>
+   <bean id="sic" class="com.nt.controller.StudentInsertController">
+   <property name="formView" value="insert_student"/>
+<!--    <property name="successView" value="insert_result"/> -->
+   <property name="commandClass" value="com.nt.command.StudentCommand"/>
+   <property name="commandName" value="stCmd"/>
+   <property name="validator" ref="stValidator"/>
+   <property name="sessionForm" value="true"/>
+   	<property name="service" ref="stService"/>
+   </bean>
+   
+    <bean id="suc" class="com.nt.controller.StudentUpdateController">
+   <property name="formView" value="edit_student"/>
+<!--    <property name="successView" value="edit_result"/> -->
+   <property name="commandClass" value="com.nt.command.StudentCommand"/>
+   <property name="commandName" value="stCmd"/>
+   <property name="validator" ref="stValidator"/>
+   <property name="sessionForm" value="true"/>
+   	<property name="service" ref="stService"/>
+   </bean>
+  
+   <bean id="sdc" class="com.nt.controller.StudentDeleteController">
+   		<property name="service" ref="stService"/>
+   </bean>
+   
+    <bean id="pvc1"  class="org.springframework.web.servlet.mvc.ParameterizableViewController"> 
+      <property name="viewName"  value="home"/> 
+   </bean>
+   
+   <bean id="pvc2"  class="org.springframework.web.servlet.mvc.ParameterizableViewController"> 
+      <property name="viewName"  value="delete_result"/> 
+   </bean>
+   
+  <bean id="vr" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/pages/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+  
+</beans>
